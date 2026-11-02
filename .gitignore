@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+node_modules/
+.env
+.env.*
+!.env.example
+/MASTER_PROMPT_FOR_WEBSITE_BUILDER.txt
+/WHAMSY_PROJECT_BRIEF.md
+/START_HERE.txt
+/reference_images/

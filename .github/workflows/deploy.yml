@@ -1,0 +1,42 @@
+name: Publish WHAMSY site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v6
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Prepare public website files
+        run: |
+          mkdir -p _site/assets
+          cp index.html shop.html product.html cart.html checkout.html about.html contact.html policies.html _site/
+          cp config.js store.js app.js admin.js styles.css admin.css _site/
+          cp admin.html _site/
+          cp -R assets/. _site/assets/
+          touch _site/.nojekyll
+      - name: Upload website files
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Publish website
+        id: deployment
+        uses: actions/deploy-pages@v4
